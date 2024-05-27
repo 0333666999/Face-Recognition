@@ -1,0 +1,29 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import os
+import warnings
+warnings.filterwarnings("ignore")
+df = pd.read_csv("/kaggle/input/cardiovascular-disease-dataset/cardio_train.csv",sep=";")
+df.head()
+duplicate_sum = df.duplicated().sum()
+if duplicate_sum:
+    print('Duplicates Rows in Dataset are : {}'.format(duplicate_sum))
+else:
+    print('Dataset contains no Duplicate Values')
+    def outliers(df_out, drop = False):
+     for each_feature in df_out.columns:
+        feature_data = df_out[each_feature]
+        Q1 = np.percentile(feature_data, 25.)
+        Q3 = np.percentile(feature_data, 75.)
+        IQR = Q3-Q1
+        outlier_step = IQR * 1.5
+        outliers = feature_data[~((feature_data >= Q1 - outlier_step) & (feature_data <= Q3 + outlier_step))].index.tolist()  
+        print('For the feature {}, No of Outliers is {}'.format(each_feature, len(outliers)))
+
+outliers(df[['height', 'weight']])
+
+
+
+
